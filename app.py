@@ -33,7 +33,9 @@ def send_email(to_email):
 
 def give_kudos(activity_id):
     client = Client(access_token=os.environ.get('STRAVA_ACCESS_TOKEN'))
-    athlete = client.get_athlete()
+    activity = client.get_activity(activity_id)
+    logger.info('activity = {}'.format(activity))
+    athlete = client.get_athlete(activity.athlete.id)
     logger.info('Giving kudos to {}'.format(athlete.username))
     logger.info('Email: {}'.format(athlete.email))
     send_email(athlete.email)
@@ -42,6 +44,6 @@ def give_kudos(activity_id):
 def webhook():
     logger.info('payload = \n{}'.format(request.json))
     data = request.json
-    activity_id = data['activity_link'].strip().split('/')[-1]
+    activity_id = int(data['activity_link'].strip().split('/')[-1])
     give_kudos(activity_id)
     return 'ok'

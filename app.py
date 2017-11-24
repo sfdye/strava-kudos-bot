@@ -11,11 +11,6 @@ import sendgrid
 from sendgrid.helpers.mail import *
 from stravalib import Client
 
-MAILGUN_API_KEY = os.environ.get('MAILGUN_API_KEY')
-MAILGUN_DOMAIN = os.environ.get('MAILGUN_DOMAIN')
-STRAVA_ACCESS_TOKEN = os.environ.get('STRAVA_ACCESS_TOKEN')
-
-
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
@@ -23,12 +18,12 @@ app.logger.addHandler(logging.StreamHandler(sys.stdout))
 app.logger.setLevel(logging.INFO)
 
 
-def sendgrid_email(to_email):
+def send_email(to_email):
     sg = sendgrid.SendGridAPIClient(apikey=os.environ.get('SENDGRID_API_KEY'))
-    from_email = Email("test@example.com")
-    subject = "Hello World from the SendGrid Python Library!"
+    from_email = Email("no-reply@strava-kudosbot.com")
+    subject = "Kudos on your activity!"
     to_email = Email(to_email)
-    content = Content("text/plain", "Hello, Email!")
+    content = Content("text/plain", "Well done. Congratulations!")
     mail = Mail(from_email, subject, to_email, content)
     response = sg.client.mail.send.post(request_body=mail.get())
     logger.info(response.status_code)
@@ -36,23 +31,12 @@ def sendgrid_email(to_email):
     logger.info(response.headers)
 
 
-def send_email(to_addr):
-    logger.info('Sending email to {}'.format(to_addr))
-    requests.post(
-        "https://api.mailgun.net/v3/{}/messages".format(MAILGUN_DOMAIN),
-        auth=("api", MAILGUN_API_KEY),
-        data={"from": "Excited User <mailgun@YOUR_DOMAIN_NAME>",
-              "to": [to_addr, "YOU@YOUR_DOMAIN_NAME"],
-              "subject": "Hello",
-              "text": "Testing some Mailgun awesomness!"})
-
-
 def give_kudos(activity_id):
-    client = Client(access_token=STRAVA_ACCESS_TOKEN)
+    client = Client(access_token=os.environ.get('STRAVA_ACCESS_TOKEN'))
     athlete = client.get_athlete()
     logger.info('Giving kudos to {}'.format(athlete.username))
     logger.info('Email: {}'.format(athlete.email))
-    sendgrid_email(athlete.email)
+    send_email(athlete.email)
 
 @app.route("/webhook", methods=['POST'])
 def webhook():

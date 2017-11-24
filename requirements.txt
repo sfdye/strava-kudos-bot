@@ -1,0 +1,2 @@
+flask==0.12.2
+stravalib==0.6.6

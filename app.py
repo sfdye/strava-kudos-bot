@@ -22,13 +22,15 @@ app.logger.setLevel(logging.INFO)
 
 
 def send_email(to_addr):
-    return requests.post(
+    loggor.info('Sending email to {}'.format(to_addr))
+    requests.post(
         "https://api.mailgun.net/v3/{}/messages".format(MAILGUN_DOMAIN),
         auth=("api", MAILGUN_API_KEY),
         data={"from": "Excited User <mailgun@YOUR_DOMAIN_NAME>",
               "to": [to_addr, "YOU@YOUR_DOMAIN_NAME"],
               "subject": "Hello",
               "text": "Testing some Mailgun awesomness!"})
+
 
 def give_kudos(activity_id):
     client = Client(access_token=STRAVA_ACCESS_TOKEN)

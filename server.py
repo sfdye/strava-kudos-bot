@@ -25,6 +25,3 @@ def webhook():
     activity_id = data['activity_link'].strip().split('/')[-1]
     give_kudos(activity_id)
     return 'ok'
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0')

@@ -22,7 +22,7 @@ app.logger.setLevel(logging.INFO)
 
 
 def send_email(to_addr):
-    loggor.info('Sending email to {}'.format(to_addr))
+    logger.info('Sending email to {}'.format(to_addr))
     requests.post(
         "https://api.mailgun.net/v3/{}/messages".format(MAILGUN_DOMAIN),
         auth=("api", MAILGUN_API_KEY),

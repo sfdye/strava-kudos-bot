@@ -18,12 +18,21 @@ app.logger.addHandler(logging.StreamHandler(sys.stdout))
 app.logger.setLevel(logging.INFO)
 
 
-def send_email(to_email):
+def send_email(athlete, activity):
     sg = sendgrid.SendGridAPIClient(apikey=os.environ.get('SENDGRID_API_KEY'))
     from_email = Email("no-reply@strava-kudosbot.com")
-    subject = "Kudos on your activity!"
-    to_email = Email(to_email)
-    content = Content("text/plain", "Well done. Congratulations!")
+    subject = "Kudos on your {}!".format(activity.name)
+    to_email = Email(athlete.email)
+    content = Content("text/plain", 
+        """
+        Hi {} {},
+        
+        Well done!
+
+        Keep up the good work,
+        Strava Kudosbot
+        """.format(athlete.firstname, athlete.lastname)
+    )
     mail = Mail(from_email, subject, to_email, content)
     response = sg.client.mail.send.post(request_body=mail.get())
     logger.info(response.status_code)
@@ -38,7 +47,7 @@ def give_kudos(activity_id):
     athlete = client.get_athlete(activity.athlete.id)
     logger.info('Giving kudos to {}'.format(athlete.username))
     logger.info('Email: {}'.format(athlete.email))
-    send_email(athlete.email)
+    send_email(athlete, activity)
 
 @app.route("/webhook", methods=['POST'])
 def webhook():

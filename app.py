@@ -1,13 +1,11 @@
 from __future__ import print_function
 
 import logging
-import json
 import os
 import sys
 
-from flask import Flask, request
-import requests
 import sendgrid
+from flask import Flask, request
 from sendgrid.helpers.mail import *
 from stravalib import Client
 
@@ -23,16 +21,16 @@ def send_email(athlete, activity):
     from_email = Email("no-reply@strava-kudosbot.com")
     subject = "Kudos on your {}!".format(activity.name)
     to_email = Email(athlete.email)
-    content = Content("text/plain", 
-        """
-        Hi {} {},
-        
-        Well done!
-
-        Keep up the good work,
-        Strava Kudosbot
-        """.format(athlete.firstname, athlete.lastname)
-    )
+    content = Content("text/plain",
+                      """
+                      Hi {} {},
+                      
+                      Well done!
+              
+                      Keep up the good work,
+                      Strava Kudosbot
+                      """.format(athlete.firstname, athlete.lastname)
+                      )
     mail = Mail(from_email, subject, to_email, content)
     response = sg.client.mail.send.post(request_body=mail.get())
     logger.info(response.status_code)
@@ -48,6 +46,7 @@ def give_kudos(activity_id):
     logger.info('Giving kudos to {}'.format(athlete.username))
     logger.info('Email: {}'.format(athlete.email))
     send_email(athlete, activity)
+
 
 @app.route("/webhook", methods=['POST'])
 def webhook():

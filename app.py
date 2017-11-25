@@ -21,7 +21,7 @@ def send_email(athlete, activity):
     from_email = Email("no-reply@stravakudosbot.com")
     subject = "Kudos on your {}!".format(activity.name)
     to_email = Email(athlete.email)
-    content = Content("text/plain",
+    content = Content("text/html",
                       """
                       Hi {} {},
                       

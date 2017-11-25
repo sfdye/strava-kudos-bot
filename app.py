@@ -28,7 +28,8 @@ def send_email(athlete, activity):
                       Well done!
               
                       Keep up the good work,
-                      Strava Kudosbot
+                      
+                      From the friendly Strava Kudos Bot
                       """.format(athlete.firstname, athlete.lastname)
                       )
     mail = Mail(from_email, subject, to_email, content)

@@ -18,7 +18,7 @@ app.logger.setLevel(logging.INFO)
 
 def send_email(athlete, activity):
     sg = sendgrid.SendGridAPIClient(apikey=os.environ.get('SENDGRID_API_KEY'))
-    from_email = Email("no-reply@strava-kudosbot.com")
+    from_email = Email("no-reply@stravakudosbot.com")
     subject = "Kudos on your {}!".format(activity.name)
     to_email = Email(athlete.email)
     content = Content("text/plain",
@@ -29,7 +29,7 @@ def send_email(athlete, activity):
               
                       Keep up the good work,
                       
-                      From the friendly Strava Kudos Bot
+                      From the friendly Strava Kudos Bot🤖
                       """.format(athlete.firstname, athlete.lastname)
                       )
     mail = Mail(from_email, subject, to_email, content)

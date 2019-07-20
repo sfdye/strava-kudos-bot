@@ -1,4 +1,4 @@
 gunicorn==19.7.1
-flask==0.12.2
+flask==1.0
 sendgrid==5.3.0
 stravalib==0.6.6
